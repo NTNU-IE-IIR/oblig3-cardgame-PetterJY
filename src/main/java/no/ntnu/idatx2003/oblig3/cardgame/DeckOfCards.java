@@ -32,17 +32,13 @@ public class DeckOfCards {
    * @return an array of random cards.
    */
   public PlayingCard[] dealHand(int numberOfRandomCards) {
-    PlayingCard[] randomDeck;
-    randomDeck = new PlayingCard[numberOfRandomCards]; // Create a new array of random cards.
+    PlayingCard[] randomDeck = new PlayingCard[numberOfRandomCards]; // Create a new array of random cards.
+    ArrayList<PlayingCard> deckList = new ArrayList<PlayingCard>(Arrays.asList(this.deck));
     Random rand = new Random(); // Create a new random object.
     for (int i = 0; i < numberOfRandomCards; i++) { // Loop through the random deck.
-      PlayingCard randomPlayingCard = new PlayingCard(this.suits[rand.nextInt(suits.length)],
-                                      this.faces[rand.nextInt(faces.length)]); // Create a new random card.
-      for (PlayingCard checkedCard : randomDeck) { // Loop through the random deck.
-        if (!randomPlayingCard.equals(checkedCard)) { // Check if the random card is not in the random deck.
-          randomDeck[i] = randomPlayingCard; // Add the random card to the random deck.
-        }
-      }
+      int randomIndex = rand.nextInt(deckList.size()); // Get a random index from the deck list.
+      randomDeck[i] = deckList.get(randomIndex); // Add the card to the random deck.
+      deckList.remove(randomIndex); // Remove the card from the deck list.
     }
     return randomDeck;
   }
