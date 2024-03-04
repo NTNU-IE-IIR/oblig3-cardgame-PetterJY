@@ -1,7 +1,6 @@
 package no.ntnu.idatx2003.oblig3.cardgame;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -43,6 +42,75 @@ public class DeckOfCards {
       this.deck.remove(randomIndex); // Remove the card from the deck list.
     }
     return randomDeck;
+  }
+
+  /**
+   * Returns the cards of hearts in the given array of cards.
+   *
+   * @return the cards of hearts in the given array of cards.
+   */
+  public ArrayList<PlayingCard> cardsOfHearts(ArrayList<PlayingCard> cards) {
+    ArrayList<PlayingCard> hearts = new ArrayList<>();
+    for (PlayingCard card : cards) {
+      if (card.getSuit() == 'H') {
+        hearts.add(card);
+      }
+    }
+    return hearts;
+  }
+
+  /**
+   * Return the sum of the faces given in the array of cards.
+   *
+   * @return the sum of the faces given in the array of cards.
+   */
+  public int sumOfFaces(ArrayList<PlayingCard> cards) {
+    int sum = 0;
+    for (PlayingCard card : cards) {
+      sum += card.getFace();
+    }
+    return sum;
+  }
+
+  /**
+   * Checks if the provided in the arraylist is a flush or not.
+   * Returns true if it's a flush, else return false.
+   *
+   * @param cards the hand to check
+   * @return true if it's a flush, false if not.
+   */
+  public boolean checkFlush(ArrayList<PlayingCard> cards) {
+    boolean isFlush = true;
+    char firstCardType = cards.get(0).getSuit();
+    int i = 0;
+    while (i < cards.size() && isFlush) {
+      char cardType =  cards.get(i).getSuit();
+      if (firstCardType == cardType) {
+        isFlush = false;
+      }
+      i++;
+    }
+    return isFlush;
+  }
+
+  /**
+   * Checks if the provided array contains the queen of spades.
+   * Returns true if it contains the queen of spades, else return false.
+   *
+   * @param cards the hand to check
+   * @return true if it contains the queen of spades, false if not.
+   */
+  public boolean containsQueenOfSpades(ArrayList<PlayingCard> cards) {
+    boolean containQueenOfSpades = false;
+    int i = 0;
+    while (i < cards.size() && !containQueenOfSpades) {
+      PlayingCard card = cards.get(i);
+      if (card.getAsString().equals("S12")) {
+        containQueenOfSpades = true;
+      }
+      i++;
+    }
+    return containQueenOfSpades;
   }
 
   /**

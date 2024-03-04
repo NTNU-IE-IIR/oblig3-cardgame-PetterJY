@@ -9,11 +9,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
+
 
 public class DeckOfCardsUI extends Application {
   private DeckOfCards deck; // The deck of cards.
+  private ArrayList<PlayingCard> hand; // The hand of cards.
   public DeckOfCardsUI() {
     this.deck = new DeckOfCards(); // Create a new deck of cards.
   }
@@ -22,12 +23,6 @@ public class DeckOfCardsUI extends Application {
     //Buttons
     Button dealHand = new Button("Deal Hand");
     Button checkHand = new Button("Check Hand");
-
-    //Text fields
-    TextField sumOfTheFaces = new TextField();
-    TextField cardsOfHearts = new TextField();
-    TextField flush = new TextField();
-    TextField queenOfSpades = new TextField();
 
     //BorderPane
     BorderPane borderPane = new BorderPane();
@@ -72,6 +67,12 @@ public class DeckOfCardsUI extends Application {
     Label card4 = new Label();
     Label card5 = new Label();
 
+    //Adding the checkHand labels
+    TextField displaySumOfTheFaces = new TextField();
+    TextField displayCardsOfHearts = new TextField();
+    TextField displayIsFlush = new TextField();
+    TextField displayQueenOfSpades = new TextField();
+
     //Adding the card labels to the subCenter GridPane
     //To be centered in the middle of the center box
     subCenter.add(card1, 0, 0);
@@ -80,19 +81,46 @@ public class DeckOfCardsUI extends Application {
     subCenter.add(card4, 3, 0);
     subCenter.add(card5, 4, 0);
 
+    ArrayList<Label> cardLabels = new ArrayList<>();
+    cardLabels.add(card1);
+    cardLabels.add(card2);
+    cardLabels.add(card3);
+    cardLabels.add(card4);
+    cardLabels.add(card5);
+
     //Setting alignment of the subCenter GridPane
     subCenter.setAlignment(Pos.CENTER);
 
     //Adding action to dealHand button
     try {
     dealHand.setOnAction(e -> {
-      ArrayList<PlayingCard> hand = this.deck.dealHand(5);
-      card1.setText(hand.get(0).getAsString());
-      card2.setText(hand.get(1).getAsString());
-      card3.setText(hand.get(2).getAsString());
-      card4.setText(hand.get(3).getAsString());
-      card5.setText(hand.get(4).getAsString());
+      this.hand = this.deck.dealHand(5);
+      for (int i = 0; i < this.hand.size(); i++) {
+        cardLabels.get(i).setText(this.hand.get(i).getAsString());
+      }
     });} catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+
+    try {
+    checkHand.setOnAction(e -> {
+      boolean isQueenOfSpades = this.deck.containsQueenOfSpades(this.hand);
+      System.out.println(isQueenOfSpades);
+      boolean isFlush = this.deck.checkFlush(this.hand);
+      int sumOfFaces = this.deck.sumOfFaces(this.hand);
+      ArrayList<PlayingCard> hearts = this.deck.cardsOfHearts(this.hand);
+
+      ArrayList<String> heartsAsString = new ArrayList<>();
+      for (PlayingCard card : hearts) {
+        heartsAsString.add(card.getAsString());
+      }
+
+      displayQueenOfSpades.setText("" + isQueenOfSpades);
+      displayIsFlush.setText("" + isFlush);
+      displaySumOfTheFaces.setText("" + sumOfFaces);
+      displayCardsOfHearts.setText(heartsAsString.toString());
+    });
+    } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
 
@@ -105,11 +133,11 @@ public class DeckOfCardsUI extends Application {
     bottom.setAlignment(Pos.CENTER);
     right.setAlignment(Pos.CENTER);
 
-    //Adding text fields to the GridPanes
-    subBottom.add(sumOfTheFaces, 1, 0);
-    subBottom.add(cardsOfHearts, 3, 0);
-    subBottom.add(flush, 1, 1);
-    subBottom.add(queenOfSpades, 3, 1);
+    //Adding labels fields of checkHand to the GridPanes
+    subBottom.add(displaySumOfTheFaces, 1, 0);
+    subBottom.add(displayCardsOfHearts, 3, 0);
+    subBottom.add(displayIsFlush, 1, 1);
+    subBottom.add(displayQueenOfSpades, 3, 1);
 
     //Adding labels to the text fields
     Label sumOfTheFacesLabel = new Label("Sum of the faces:");
@@ -136,6 +164,15 @@ public class DeckOfCardsUI extends Application {
     stage.setMinWidth(300);
     stage.show();
     stage.show();
+  }
+
+  /**
+   * Returns the deck of cards.
+   *
+   * @return the deck of cards
+   */
+  public ArrayList<PlayingCard> getHand() {
+    return hand;
   }
 
   public static void appMain(String[] args) {
