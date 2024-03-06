@@ -1,5 +1,6 @@
 package no.ntnu.idatx2003.oblig3.cardgame;
 
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -7,43 +8,48 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.util.ArrayList;
 
-
-public class DeckOfCardsUI extends Application {
+/**
+ * A UI for the DeckOfCards class.
+ */
+public class DeckOfCardsUi extends Application {
   private DeckOfCards deck; // The deck of cards.
   private ArrayList<PlayingCard> hand; // The hand of cards.
-  public DeckOfCardsUI() {
+
+  /**
+   * Constructor for the DeckOfCardsUi.
+   */
+  public DeckOfCardsUi() {
     this.deck = new DeckOfCards(); // Create a new deck of cards.
   }
+
+  /**
+   * Starts the UI.
+   *
+   * @param stage the window.
+   * @throws Exception if the UI cannot be started.
+   */
   @Override
   public void start(Stage stage) throws Exception {
-    //Buttons
-    Button dealHand = new Button("Deal Hand");
-    Button checkHand = new Button("Check Hand");
-
-    //BorderPane
-    BorderPane borderPane = new BorderPane();
+    GridPane subBottom = new GridPane();
+    //Setting the position of the GridPanes
+    subBottom.setPadding(new Insets(10, 10, 10, 10));
+    subBottom.setHgap(10);
+    subBottom.setVgap(10);
+    GridPane subCenter = new GridPane();
+    subCenter.setPadding(new Insets(10, 10, 10, 10));
+    subCenter.setHgap(10);
+    subCenter.setVgap(10);
 
     //Setting boxes
     VBox center = new VBox();
     VBox right = new VBox();
     HBox bottom = new HBox();
-
-    //Setting GridPanes
-    GridPane subBottom = new GridPane();
-    GridPane subCenter = new GridPane();
-
-    //Setting the position of the GridPanes
-    subBottom.setPadding(new Insets(10, 10, 10, 10));
-    subBottom.setHgap(10);
-    subBottom.setVgap(10);
-
-    subCenter.setPadding(new Insets(10, 10, 10, 10));
-    subCenter.setHgap(10);
-    subCenter.setVgap(10);
 
     //Setting the size of the boxes
     center.setPrefSize(300, 200);
@@ -55,6 +61,10 @@ public class DeckOfCardsUI extends Application {
     center.setStyle("-fx-background-color: #FFFFFF");
     right.setStyle("-fx-background-color: #FFFFFF");
     bottom.setStyle("-fx-background-color: #FFFFFF");
+
+    //Buttons
+    Button dealHand = new Button("Deal Hand");
+    Button checkHand = new Button("Check Hand");
 
     //Adding buttons to the boxes
     right.getChildren().add(dealHand);
@@ -93,33 +103,31 @@ public class DeckOfCardsUI extends Application {
 
     //Adding action to dealHand button
     try {
-    dealHand.setOnAction(e -> {
-      this.hand = this.deck.dealHand(5);
-      for (int i = 0; i < this.hand.size(); i++) {
-        cardLabels.get(i).setText(this.hand.get(i).getAsString());
-      }
-    });} catch (IllegalArgumentException e) {
+      dealHand.setOnAction(e -> {
+        this.hand = this.deck.dealHand(5);
+        for (int i = 0; i < this.hand.size(); i++) {
+          cardLabels.get(i).setText(this.hand.get(i).getAsString());
+        }
+      });
+    } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
 
     try {
-    checkHand.setOnAction(e -> {
-      boolean isQueenOfSpades = this.deck.containsQueenOfSpades(this.hand);
-      System.out.println(isQueenOfSpades);
-      boolean isFlush = this.deck.checkFlush(this.hand);
-      int sumOfFaces = this.deck.sumOfFaces(this.hand);
-      ArrayList<PlayingCard> hearts = this.deck.cardsOfHearts(this.hand);
-
-      ArrayList<String> heartsAsString = new ArrayList<>();
-      for (PlayingCard card : hearts) {
-        heartsAsString.add(card.getAsString());
-      }
-
-      displayQueenOfSpades.setText("" + isQueenOfSpades);
-      displayIsFlush.setText("" + isFlush);
-      displaySumOfTheFaces.setText("" + sumOfFaces);
-      displayCardsOfHearts.setText(heartsAsString.toString());
-    });
+      checkHand.setOnAction(e -> {
+        boolean isQueenOfSpades = this.deck.containsQueenOfSpades(this.hand);
+        boolean isFlush = this.deck.checkFlush(this.hand);
+        ArrayList<PlayingCard> hearts = this.deck.cardsOfHearts(this.hand);
+        ArrayList<String> heartsAsString = new ArrayList<>();
+        for (PlayingCard card : hearts) {
+          heartsAsString.add(card.getAsString());
+        }
+        int sumOfFaces = this.deck.sumOfFaces(this.hand);
+        displayQueenOfSpades.setText("" + isQueenOfSpades);
+        displayIsFlush.setText("" + isFlush);
+        displaySumOfTheFaces.setText("" + sumOfFaces);
+        displayCardsOfHearts.setText(heartsAsString.toString());
+      });
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
@@ -150,6 +158,9 @@ public class DeckOfCardsUI extends Application {
     subBottom.add(cardsOfHeartsLabel, 2, 0);
     subBottom.add(flushLabel, 0, 1);
     subBottom.add(queenOfSpadesLabel, 2, 1);
+
+    //BorderPane
+    BorderPane borderPane = new BorderPane();
 
     //Adding boxes to the border
     borderPane.setCenter(center);

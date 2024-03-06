@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+/**
+ * Represents a deck of cards.
+ * A deck of cards has 52 cards, 13 of each suit.
+ */
 public class DeckOfCards {
   private final char[] suits = { 'S', 'H', 'D', 'C' };
   private final char[] faces = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
@@ -30,11 +34,12 @@ public class DeckOfCards {
    */
   public ArrayList<PlayingCard> dealHand(int numberOfRandomCards) {
     if (numberOfRandomCards > this.deck.size()) {
-      throw new IllegalArgumentException("Number of cards to deal is greater than the number of cards in the deck.");
+      throw new IllegalArgumentException(
+              "Number of cards to deal is greater than the number of cards in the deck.");
     } else if (numberOfRandomCards <= 0) {
       throw new IllegalArgumentException("Number of cards to deal cannot be negative or 0.");
     }
-    ArrayList<PlayingCard> randomDeck = new ArrayList<>(); // Create a new array list for the random deck.
+    ArrayList<PlayingCard> randomDeck = new ArrayList<>();
     Random rand = new Random(); // Create a new random object.
     for (int i = 0; i < numberOfRandomCards; i++) { // Loop through the random deck.
       int randomIndex = rand.nextInt(this.deck.size()); // Get a random index from the deck list.

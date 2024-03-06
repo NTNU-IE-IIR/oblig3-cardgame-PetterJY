@@ -1,7 +1,10 @@
 package no.ntnu.idatx2003.oblig3.cardgame;
 
+/**
+ * The main class of the application.
+ */
 public class Main {
   public static void main(String[] args) {
-    DeckOfCardsUI.appMain(args);
+    DeckOfCardsUi.appMain(args);
   }
 }
